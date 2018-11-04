@@ -8,12 +8,13 @@ from pyquery import PyQuery as pq
 from conf import *
 from urllib.parse import quote
 
-# browser = webdriver.Chrome()
-# browser = webdriver.PhantomJS(service_args=SERVICE_ARGS)
+browser = webdriver.Chrome()
+browser = webdriver.PhantomJS(service_args=SERVICE_ARGS)
 
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument('--headless')
+chrome_options.add_argument('headless')
 browser = webdriver.Chrome(chrome_options=chrome_options)
+# browser = webdriver.PhantomJS()
 
 wait = WebDriverWait(browser, 10)
 client = pymongo.MongoClient(MONGO_URL)
@@ -27,6 +28,7 @@ def index_page(page):
     """
     print('正在爬取第', page, '页')
     try:
+        KEYWORD='空气净化器'
         url = 'https://s.taobao.com/search?q=' + quote(KEYWORD)
         browser.get(url)
         if page > 1:
@@ -71,7 +73,7 @@ def save_to_mongo(result):
     :param result: 结果
     """
     try:
-        if db[MONGO_COLLECTION].insert(result):
+       # if db[MONGO_COLLECTION].insert(result):
             print('存储到MongoDB成功')
     except Exception:
         print('存储到MongoDB失败')
